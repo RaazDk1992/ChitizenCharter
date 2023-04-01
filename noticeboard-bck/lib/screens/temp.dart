@@ -1,8 +1,6 @@
 import 'package:clean_nepali_calendar/clean_nepali_calendar.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,68 +26,66 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Clean Nepali Calendar'),
       ),
-      body: Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CleanNepaliCalendar(
-                headerDayBuilder: (_, index) {
-                  return Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Text(
-                          '$_',
-                          style: TextStyle(
-                              color: (index == 6) ? Colors.red : null),
-                        ),
-                      ));
-                },
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CleanNepaliCalendar(
+              headerDayBuilder: (_, index) {
+                return Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Text(
+                        '$_',
+                        style:
+                            TextStyle(color: (index == 6) ? Colors.red : null),
+                      ),
+                    ));
+              },
 
-                // headerBuilder: (_,__,___,____,______)=>Text("header"),
-                headerDayType: HeaderDayType.fullName,
-                controller: _nepaliCalendarController,
-                onHeaderLongPressed: (date) {
-                  print("header long pressed $date");
-                },
-                onHeaderTapped: (date) {
-                  print("header tapped $date");
-                },
-                calendarStyle: CalendarStyle(
-                  // weekEndTextColor : Colors.green,
-                  selectedColor: Colors.deepOrange,
-                  dayStyle: TextStyle(fontWeight: FontWeight.bold),
-                  todayStyle: TextStyle(
-                    fontSize: 20.0,
-                  ),
-                  todayColor: Colors.orange.shade400,
-                  // highlightSelected: true,
-                  renderDaysOfWeek: true,
-                  highlightToday: true,
+              // headerBuilder: (_,__,___,____,______)=>Text("header"),
+              headerDayType: HeaderDayType.fullName,
+              controller: _nepaliCalendarController,
+              onHeaderLongPressed: (date) {
+                print("header long pressed $date");
+              },
+              onHeaderTapped: (date) {
+                print("header tapped $date");
+              },
+              calendarStyle: CalendarStyle(
+                // weekEndTextColor : Colors.green,
+                selectedColor: Colors.deepOrange,
+                dayStyle: TextStyle(fontWeight: FontWeight.bold),
+                todayStyle: TextStyle(
+                  fontSize: 20.0,
                 ),
-                headerStyle: HeaderStyle(
-                  enableFadeTransition: false,
-                  centerHeaderTitle: false,
-                  titleTextStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepOrange,
-                      fontSize: 20.0),
-                ),
-                initialDate: NepaliDateTime.now(),
-                firstDate: first,
-                lastDate: last,
-                language: Language.nepali,
-
-                onDaySelected: (day) {
-                  print(day.toString());
-                },
-
-                // display the english date along with nepali date.
-                dateCellBuilder: cellBuilder,
+                todayColor: Colors.orange.shade400,
+                // highlightSelected: true,
+                renderDaysOfWeek: true,
+                highlightToday: true,
               ),
-            ],
-          ),
+              headerStyle: HeaderStyle(
+                enableFadeTransition: false,
+                centerHeaderTitle: false,
+                titleTextStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepOrange,
+                    fontSize: 20.0),
+              ),
+              initialDate: NepaliDateTime.now(),
+              firstDate: first,
+              lastDate: last,
+              language: Language.nepali,
+
+              onDaySelected: (day) {
+                print(day.toString());
+              },
+
+              // display the english date along with nepali date.
+              dateCellBuilder: cellBuilder,
+            ),
+          ],
         ),
       ),
     );
