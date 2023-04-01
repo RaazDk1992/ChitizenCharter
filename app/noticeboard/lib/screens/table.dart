@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:noticeboard/main.dart';
 import 'package:noticeboard/models/services.dart';
 import 'package:noticeboard/screens/home.dart';
@@ -22,6 +23,10 @@ class CustomTable extends StatefulWidget {
 class _TableState extends State<CustomTable> {
   List<Service> serviceList = [];
   var is_service_loaded = false;
+  /**
+   * Assuming we have no internet now.
+   */
+  bool no_internet = false;
   final _key = new GlobalKey<PaginatedDataTableState>();
 
 /**
@@ -42,9 +47,6 @@ class _TableState extends State<CustomTable> {
     // TODO: implement initState
     super.initState();
     getServices();
-    Timer.periodic(Duration(seconds: 20), (timer) {
-      //doflip();
-    });
   }
 
   get loading => SpinKitCubeGrid(
@@ -63,7 +65,7 @@ class _TableState extends State<CustomTable> {
           children: <Widget>[
             CarouselSlider(
               options: CarouselOptions(
-                height: 585.0,
+                height: 575.0,
                 initialPage: 0,
                 enableInfiniteScroll: true,
                 autoPlay: true,
@@ -310,19 +312,55 @@ class _TableState extends State<CustomTable> {
                 );
               }).toList(),
             ),
+            Visibility(
+                visible: no_internet,
+                child: Row(
+                  children: [],
+                ))
           ],
         ),
       ),
     );
   }
 
+/**
+ * Method checks internet connection, if not available at the moment,
+ * keeps checking at every two seconds, if internet is back again, this
+ * checking is auto cancelled.
+ */
+  getConnectivity() async {
+    no_internet = await InternetConnectionChecker().hasConnection;
+    if (!no_internet) {
+      Timer.periodic(Duration(seconds: 2), (timer) {
+        getConnectivity();
+
+        if (no_internet) {
+          timer.cancel();
+        }
+      });
+      setState(() {
+        no_internet = false;
+      });
+    } else {
+      setState(() {
+        no_internet = true;
+      });
+    }
+  }
+
+/**
+ * Method flips the slide to carousel sides, when service slides have completed one circle.
+ */
   flipPage() {
     HomeScreen.of(context)?.setState(() {
       HomeScreen.of(context)?.table_done = true;
-      print(HomeScreen.of(context)?.table_done);
     });
   }
 
+/**
+ * Method fetches service data based on model ./modes/services.dart
+ * and background worker .worker/fetchservices.dart
+ */
   getServices() async {
     serviceList = (await FetchServices().fetchServices())!;
     if (serviceList != null) {

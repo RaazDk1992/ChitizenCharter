@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:noticeboard/models/slider.dart';
 import 'package:noticeboard/worker/fetchslides.dart';
 
@@ -21,6 +22,7 @@ class CarouselSliderScreen extends StatefulWidget {
 
 class _CarouselSliderScreen extends State<CarouselSliderScreen> {
   List<Sliderx> slides = [];
+  bool no_internet = false;
   int t = 0;
   var isSlideLoaded = false;
   @override
@@ -142,6 +144,26 @@ class _CarouselSliderScreen extends State<CarouselSliderScreen> {
             ),
           ),
         ));
+  }
+
+  getConnectivity() async {
+    no_internet = await InternetConnectionChecker().hasConnection;
+    if (!no_internet) {
+      Timer.periodic(Duration(seconds: 2), (timer) {
+        getConnectivity();
+
+        if (no_internet) {
+          timer.cancel();
+        }
+      });
+      setState(() {
+        no_internet = false;
+      });
+    } else {
+      setState(() {
+        no_internet = true;
+      });
+    }
   }
 
   flipPage() {

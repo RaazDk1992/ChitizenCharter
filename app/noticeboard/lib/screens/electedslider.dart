@@ -45,7 +45,7 @@ class _ElectedSliderState extends State<ElectedSlider> {
                     initialPage: 0,
                     enableInfiniteScroll: true,
                     autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 90),
+                    autoPlayInterval: Duration(seconds: 60),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enlargeCenterPage: true,

@@ -39,11 +39,11 @@ class _StaffSliderState extends State<StaffSlider> {
                 SizedBox(height: 2),
                 CarouselSlider(
                   options: CarouselOptions(
-                    height: 228.0,
+                    height: 235.0,
                     initialPage: 0,
                     enableInfiniteScroll: true,
                     autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 50),
+                    autoPlayInterval: Duration(seconds: 60),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enlargeCenterPage: true,
@@ -111,7 +111,12 @@ class _StaffSliderState extends State<StaffSlider> {
                                         SizedBox(
                                           width: 5,
                                         ),
-                                        Text(i.designation)
+                                        Flexible(
+                                          child: Text(
+                                            "${i.designation}, ${i.dept ?? '-'}",
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                        )
                                       ],
                                     ),
                                     Row(
